@@ -18,3 +18,11 @@ DEFENSE_COM_CATEGORY_ID = 4
 LAW_ORDER_COM_CATEGORY_ID = 6
 
 CURRENT_KNESET_NUM = 25
+
+_regex1 = '<< דובר >>.\n\n.\n\n.יו"ר.\n\n.*פעם ה?ראש'
+_regex2 = '<< דובר >>.\n\n.\n\n.יו"ר.\n\n.*קריאה ה?ראש'
+_regex3 = '<< דובר >>.\n\n.\n\n.יו"ר.\n\n.*פעם ה?שני'
+_regex4 = '<< דובר >>.\n\n.\n\n.יו"ר.\n\n.*קריאה ה?שני'
+_regex5 = '<< דובר >>.\n\n.\n\n.יו"ר.\n\n.*פעם ה?שליש'
+_regex6 = '<< דובר >>.\n\n.\n\n.יו"ר.\n\n.*קריאה ה?שליש'
+WARNING_REGEX = '|'.join([_regex1, _regex2, _regex3, _regex4, _regex5, _regex6])
