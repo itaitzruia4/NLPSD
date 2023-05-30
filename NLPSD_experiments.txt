@@ -1,0 +1,5 @@
+train 1500 examples transfer learning	827306	(40% accuracy)
+train 1500 examples fine tuning		827308	(75% accuracy)
+
+main after 1500 fine tune		6574610
+main after 1500 transfer		6574615
