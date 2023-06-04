@@ -14,10 +14,10 @@ class Statistics:
         committee_session_df = pd.read_csv('kns_csv_files/kns_committeesession.csv')
         committee_session_df = committee_session_df[committee_session_df['KnessetNum'] >= MIN_KNESSET_NUM]
 
-        data = dict.fromkeys(range(MIN_KNESSET_NUM, CURRENT_KNESSET_NUM + 1))
-        for knesset_num in data:
-            data[knesset_num] = dict.fromkeys(CATEGORY_IDS)
-            for category_id in data[knesset_num]:
-                data[knesset_num][category_id] = committee_session_df[(committee_session_df['KnessetNum'] == knesset_num) & (committee_session_df['CommitteeID'].isin(categories2committees[category_id]))]['CommitteeSessionID'].to_list()
+        knesset_categories_sessions = dict.fromkeys(range(MIN_KNESSET_NUM, CURRENT_KNESSET_NUM + 1))
+        for knesset_num in knesset_categories_sessions:
+            knesset_categories_sessions[knesset_num] = dict.fromkeys(CATEGORY_IDS)
+            for category_id in knesset_categories_sessions[knesset_num]:
+                knesset_categories_sessions[knesset_num][category_id] = committee_session_df[(committee_session_df['KnessetNum'] == knesset_num) & (committee_session_df['CommitteeID'].isin(categories2committees[category_id]))]['CommitteeSessionID'].to_list()
 
         
