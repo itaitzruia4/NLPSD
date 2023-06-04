@@ -29,7 +29,7 @@ class WarningCounter:
 
         self.knesset_members = [' '.join([first_name, last_name]) for first_name, last_name in zip(first_names, last_names)]
 
-    def get_meeting_warnings(self, text) -> Tuple[dict, int]:
+    def count_warnings(self, text) -> Tuple[dict, int]:
         """
         Return warnings from the meeting protocol text.
 

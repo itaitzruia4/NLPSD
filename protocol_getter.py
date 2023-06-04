@@ -3,16 +3,16 @@ import pandas as pd
 import requests
 
 class ProtocolGetter:
-    def __init__(self, comittees_path: str, min_knesset_num: int, category_ids: List[int]):
-        df = pd.read_csv(comittees_path)
+    def __init__(self, committees_path: str, min_knesset_num: int, category_ids: List[int]):
+        df = pd.read_csv(committees_path)
         df = df[['CommitteeID', 'CategoryID', 'KnessetNum']]
         df = df[df['KnessetNum'] >= min_knesset_num]
         df = df[df['CategoryID'].isin(category_ids)]
 
-        commitee_ids = df['CommitteeID'].to_list()
-        self.commitee_ids = commitee_ids
+        committee_ids = df['CommitteeID'].to_list()
+        self.committee_ids = committee_ids
 
-        self.categories2committies = {category_id: df[df['CategoryID'] == category_id]['CommitteeID'].to_list() for category_id in category_ids}
+        self.categories2committees = {category_id: df[df['CategoryID'] == category_id]['CommitteeID'].to_list() for category_id in category_ids}
 
         self.meeting_protocol_base_url = 'https://production.oknesset.org/pipelines/data/committees/meeting_protocols_text/'
 
