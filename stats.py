@@ -20,4 +20,4 @@ class Statistics:
             for category_id in knesset_categories_sessions[knesset_num]:
                 knesset_categories_sessions[knesset_num][category_id] = committee_session_df[(committee_session_df['KnessetNum'] == knesset_num) & (committee_session_df['CommitteeID'].isin(categories2committees[category_id]))]['CommitteeSessionID'].to_list()
 
-        
+
