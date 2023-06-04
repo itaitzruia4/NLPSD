@@ -2,6 +2,8 @@ from consts import *
 import numpy as np
 import pandas as pd
 from typing import Dict, List, Tuple
+import matplotlib.pyplot as plt
+from collections import Counter
 
 
 class Statistics:
@@ -27,6 +29,44 @@ class Statistics:
         knesset_members_df = pd.read_csv(MEMBERS_PATH)
         first_names, last_names = knesset_members_df['FirstName'].to_list(), knesset_members_df['LastName'].to_list()
         self.knesset_members = [' '.join([first_name, last_name]) for first_name, last_name in zip(first_names, last_names)]
+
+
+    #####################
+    # Counter Statistics
+    #####################
+    def train_data_distribution(self):
+        agg_score_bin = pd.read_csv('agg_score_bin.csv')
+        agg_score_bin = agg_score_bin.dropna()
+        scores_counter = Counter(agg_score_bin['score'])
+        labels= [str(int(x)) for x in scores_counter.keys()]
+
+        fig = plt.bar(labels, scores_counter.values())
+        plt.bar_label(fig)
+        plt.show()
+    
+    def n_sessions_per_committee(self):
+        n_sessions_per_committee_dict = {}
+        for knesset in self.knesset_categories_sessions:
+            tmp_category_to_session = {}
+            for category, sessions in self.knesset_categories_sessions[knesset]:
+                tmp_category_to_session[category] = len(sessions)
+            n_sessions_per_committee_dict[knesset] = tmp_category_to_session
+        bottom = {CATEGORY_ID_TO_NAME[cat]: 0 for cat in CATEGORY_IDS}
+        for kns, cat_ses_dct in n_sessions_per_committee_dict.items():
+            cats = []
+            sess = []
+            bots = []
+            for cat, ses in cat_ses_dct.items():
+                cats.append('\n'.join(CATEGORY_ID_TO_NAME[cat][::-1].split()[::-1]))
+                sess.append(ses)
+                bots.append(bottom[CATEGORY_ID_TO_NAME[cat]])
+            fig = plt.bar(cats, sess, label= kns, bottom= bots)
+            plt.bar_label(fig, sess)
+            for cat, ses in cat_ses_dct.items():
+                bottom[CATEGORY_ID_TO_NAME[cat]] += ses
+            print(bottom)
+        plt.legend()
+        plt.show()
 
     #####################
     # Warnings Statistics 
