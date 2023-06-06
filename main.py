@@ -22,21 +22,16 @@ def main():
     warnings = dict()
 
     for category_id in category_ids:
-        protocols: Dict[int, str] = protocol_getter.get_meeting_protocols(category_id)
+        protocols2paths: Dict[int, str] = protocol_getter.get_protocols_paths(category_id)
         
-        for id in list(protocols.keys()):
+        for id in list(protocols2paths.keys()):
             if id in warnings:
                 print(f'warning: protocol with id {id} already in warnings')
             
             # count warnings and rate aggressiveness of current protocol
-            if not isinstance(protocols[id], str):
-                print(f'warning: text of protocol with id {id} is not str')
-                del protocols[id]
-                protocols[id] = None
-                continue
-
-            warnings[id] = warning_counter.count_warnings(protocols[id])
-            score = agg_scores_rater.rate_aggressiveness(protocols[id])
+            text = protocol_getter.get_protocol_text(protocols2paths[id])
+            warnings[id] = warning_counter.count_warnings(text)
+            score = agg_scores_rater.rate_aggressiveness(text)
 
             if id in agg_scores:
                 print(f'warning: protocol with id {id} already in agg_scores')
@@ -44,11 +39,13 @@ def main():
 
         
             # clear memory to avoid memory leak
-            del protocols[id]
-            protocols[id] = None
+            del protocols2paths[id]
+            protocols2paths[id] = None
+            del text
+            text = None
 
-        del protocols
-        protocols = None
+        del protocols2paths
+        protocols2paths = None
 
     # save results to pickle files
     with open(f'results/warnings_{model}.pkl', 'wb') as f:

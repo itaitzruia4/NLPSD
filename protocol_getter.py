@@ -33,7 +33,7 @@ class ProtocolGetter:
         else:
             raise ValueError(f"Failed to retrieve content. Status code: {response.status_code}")
 
-    def get_meeting_protocols(self, committee_id, limit=10) -> Dict[int, str]:
+    def get_protocols_paths(self, committee_id, limit=None) -> Dict[int, str]:
         com_session_df = pd.read_csv('kns_csv_files/kns_committeesession.csv')
         com_session_df = com_session_df[com_session_df['CommitteeID'] == committee_id]
         com_session_df.dropna(subset=['text_parsed_filename'], inplace=True)
@@ -46,14 +46,5 @@ class ProtocolGetter:
             session_ids = session_ids[:limit]
             text_paths = text_paths[:limit]
 
-        session_ids2texts = {id: self.get_meeting_protocol_text(path) for id, path in zip(session_ids, text_paths)}
-        
-        # validate all protocol texts are not None
-        for id, text in session_ids2texts.items():
-            if text is None:
-                raise ValueError(f'text of protocol with id {id} is None')
-
-        return session_ids2texts
-
-
+        return dict(zip(session_ids, text_paths))
     

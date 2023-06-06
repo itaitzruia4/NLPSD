@@ -64,7 +64,6 @@ class Statistics:
             plt.bar_label(fig, sess)
             for cat, ses in cat_ses_dct.items():
                 bottom[CATEGORY_ID_TO_NAME[cat]] += ses
-            print(bottom)
         plt.legend()
         plt.show()
 
