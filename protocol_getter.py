@@ -1,12 +1,17 @@
-from typing import List
+from typing import List, Dict
 import pandas as pd
 import requests
 
 class ProtocolGetter:
-    def __init__(self, committees_path: str, min_knesset_num: int, category_ids: List[int]):
+    def __init__(self,
+                 committees_path: str,
+                 min_knesset_num: int,
+                 max_knesset_num: int,
+                 category_ids: List[int]):
         df = pd.read_csv(committees_path)
         df = df[['CommitteeID', 'CategoryID', 'KnessetNum']]
         df = df[df['KnessetNum'] >= min_knesset_num]
+        df = df[df['KnessetNum'] <= max_knesset_num]
         df = df[df['CategoryID'].isin(category_ids)]
 
         committee_ids = df['CommitteeID'].to_list()
@@ -28,14 +33,26 @@ class ProtocolGetter:
         else:
             raise ValueError(f"Failed to retrieve content. Status code: {response.status_code}")
 
-    def get_meeting_protocols(self, committee_id) -> List[str]:
+    def get_meeting_protocols(self, committee_id, limit=10) -> Dict[int, str]:
         com_session_df = pd.read_csv('kns_csv_files/kns_committeesession.csv')
         com_session_df = com_session_df[com_session_df['CommitteeID'] == committee_id]
         com_session_df.dropna(subset=['text_parsed_filename'], inplace=True)
+        com_session_df.drop_duplicates(subset=['text_parsed_filename'], inplace=True, keep='last')
 
         session_ids = com_session_df['CommitteeSessionID'].astype(int).to_list()
         text_paths = com_session_df['text_parsed_filename'].to_list()
+
+        if limit is not None:
+            session_ids = session_ids[:limit]
+            text_paths = text_paths[:limit]
+
         session_ids2texts = {id: self.get_meeting_protocol_text(path) for id, path in zip(session_ids, text_paths)}
+        
+        # validate all protocol texts are not None
+        for id, text in session_ids2texts.items():
+            if text is None:
+                raise ValueError(f'text of protocol with id {id} is None')
+
         return session_ids2texts
 
 

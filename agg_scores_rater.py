@@ -11,12 +11,18 @@ class AggScoresRater:
 
     def filter_protocol_sentences(self, text: str) -> str:
         ind = re.search("<< יור >>", text)
+
+        if ind is None:
+            ind = re.search("יו\"ר.*:", text)
+
         txt2 = text[ind.span()[0]:]
         txt2 = re.sub("<<.*","", txt2)
         txt2 = re.sub(">>.*","", txt2)
+        txt2 = re.sub(".*:","", txt2)
         txt2 = re.sub("-", " ", txt2)
         txt2 = re.sub("\n\s+","\n", txt2)
         txt2 = re.sub(" +"," ", txt2)
+        txt2 = re.sub("\t","", txt2)
         return txt2
 
     def rate_aggressiveness(self, protocol: str) -> float:
@@ -33,6 +39,7 @@ class AggScoresRater:
             outputs = self.model(**inputs, return_dict=False)[0].to(self.device)
 
             _, predicted = torch.max(outputs.data, 1)
+            print
             total += predicted.size(0)
             aggressive += predicted.sum().item()
 

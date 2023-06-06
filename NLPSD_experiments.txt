@@ -2,6 +2,19 @@ train 1500 examples transfer learning	827306	(40% accuracy)
 train 1500 examples fine tuning		827308	(75% accuracy)
 
 main after 1500 fine tune		6846891
-main after 1500 transfer		6846889
 
 print misclassified sentences finetune	834288
+
+knesset 25 category 1 (knesset)		6879469
+knesset 25 category 2 (money)		6872513
+knesset 25 category 4 (defense)		6872516
+knesset 25 category 6 (law and order)	6872518
+knesset 25 category 689 (mesaderet)	6879470
+
+knesset 24 category 1 (knesset)		6879471
+knesset 24 category 2 (money)		6872519
+knesset 24 category 4 (defense)		6872520
+knesset 24 category 6 (law and order)	6872521
+knesset 24 category 689 (mesaderet)	6879472
+
+complete pipeline (3 knessets 5 categories)	6894777
