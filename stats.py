@@ -88,18 +88,21 @@ class Statistics:
         warnings_per_knesset_nums = dict.fromkeys(self.knesset_categories_sessions)
         n_protocols_per_knesset_nums = dict.fromkeys(self.knesset_categories_sessions)
         for knesset_num in self.knesset_categories_sessions:
-            warnings_per_knesset_nums[knesset_num] = dict.fromkeys(self.knesset_members)
+            warnings_per_knesset_nums[knesset_num] = dict()
             n_protocols_per_knesset_nums[knesset_num] = 0
             for category_id in self.knesset_categories_sessions[knesset_num]:
-                n_protocols_per_knesset_nums[knesset_num] += len(self.knesset_categories_sessions[knesset_num][category_id])
-                for committee_session_id in self.knesset_categories_sessions[knesset_num][category_id]:
+                for session in sessions2warnings:
                     # update warnings
-                    warnings_filtered = {member: warnings for member, warnings in sessions2warnings[committee_session_id].items() if member in self.knesset_members}
+                    warnings_filtered = {
+                        member: warnings 
+                        for member, warnings in sessions2warnings[session].items() 
+                        if member in self.knesset_members
+                    }
                     for member, warnings in warnings_filtered.items():
                         if member not in warnings_per_knesset_nums[knesset_num]:
                             warnings_per_knesset_nums[knesset_num][member] = np.zeros(shape=3)
                         warnings_per_knesset_nums[knesset_num][member] += np.array(warnings)
-        return warnings_per_knesset_nums, n_protocols_per_knesset_nums
+        return warnings_per_knesset_nums
     
     def warnings_per_category(self, sessions2warnings) -> Dict[str, Dict[str, List[int]]]:
         '''
@@ -122,7 +125,6 @@ class Statistics:
             warnings_per_categories[category_id] = dict.fromkeys(self.knesset_members)
             n_protocols_per_categories[category_id] = 0
             for knesset_num in self.knesset_categories_sessions:
-                n_protocols_per_categories[category_id] += len(self.knesset_categories_sessions[knesset_num][category_id])
                 for committee_session_id in self.knesset_categories_sessions[knesset_num][category_id]:
                     # update warnings
                     warnings_filtered = {member: warnings for member, warnings in sessions2warnings[committee_session_id].items() if member in self.knesset_members}
@@ -130,7 +132,7 @@ class Statistics:
                         if member not in warnings_per_categories[category_id]:
                             warnings_per_categories[category_id][member] = np.zeros(shape=3)
                         warnings_per_categories[category_id][member] += np.array(warnings)
-        return warnings_per_categories, n_protocols_per_categories
+        return warnings_per_categories
     
     def warnings_per_committee(self, sessions2warnings) -> Dict[int, Dict[str, Dict[str, List[int]]]]:
         '''
@@ -155,7 +157,7 @@ class Statistics:
             warnings_per_committee[knesset_num] = dict.fromkeys(self.knesset_categories_sessions[knesset_num])
             for category_id in warnings_per_committee[knesset_num]:
                 warnings_per_committee[knesset_num][category_id] = dict.fromkeys(self.knesset_members)
-                for committee_session_id in self.knesset_categories_sessions[knesset_num][category_id]:
+                for committee_session_id in sessions2warnings:
                     # update warnings
                     warnings_filtered = {member: warnings for member, warnings in sessions2warnings[committee_session_id].items() if member in self.knesset_members}
                     for member, warnings in warnings_filtered.items():
