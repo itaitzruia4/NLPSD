@@ -15,6 +15,7 @@ knesset 24 category 1 (knesset)		6879471
 knesset 24 category 2 (money)		6872519
 knesset 24 category 4 (defense)		6872520
 knesset 24 category 6 (law and order)	6872521
+kns 24 cat 6 - attempt 2		6895097
 knesset 24 category 689 (mesaderet)	6879472
 
-complete pipeline (3 knessets 5 categories)	6894777
+complete pipeline (5 knessets 5 categories)	6895102

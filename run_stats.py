@@ -13,8 +13,8 @@ def main():
         for category_id in stats.knesset_categories_sessions[knesset_num]:
             with open(f'results/warnings_finetune_{knesset_num}_{category_id}.pkl', 'rb') as f:
                 warnings = pickle.load(f)
-                filtered_warnings = {session_id: warnings[session_id][0] for session_id in warnings}
-                sessions2warnings.update(filtered_warnings)
+            filtered_warnings = {session_id: warnings[session_id][0] for session_id in warnings}
+            sessions2warnings.update(filtered_warnings)
 
     
 

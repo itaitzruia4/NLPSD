@@ -29,9 +29,18 @@ def main():
                 print(f'warning: protocol with id {id} already in warnings')
             
             # count warnings and rate aggressiveness of current protocol
-            text = protocol_getter.get_protocol_text(protocols2paths[id])
+            text = protocol_getter.get_meeting_protocol_text(protocols2paths[id])
+            filtered_text = filter_protocol_sentences(text)
+
+            if filtered_text is None:
+                del text
+                del protocols2paths[id]
+                protocols2paths[id] = None
+                continue
+            
             warnings[id] = warning_counter.count_warnings(text)
-            score = agg_scores_rater.rate_aggressiveness(text)
+            sentences = filtered_text.split('\n')
+            score = agg_scores_rater.rate_aggressiveness(sentences)
 
             if id in agg_scores:
                 print(f'warning: protocol with id {id} already in agg_scores')
@@ -42,7 +51,7 @@ def main():
             del protocols2paths[id]
             protocols2paths[id] = None
             del text
-            text = None
+            
 
         del protocols2paths
         protocols2paths = None

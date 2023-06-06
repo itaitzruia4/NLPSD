@@ -26,50 +26,51 @@ def main():
     protocol_getter = ProtocolGetter(COMMITTEES_PATH, min_knesset_num, max_knesset_num, category_ids)
 
     model = 'finetune'
-    if model == 'transfer':
-        agg_scores_rater = AggScoresRater(model_path='model_transfer.pt')
-    elif model == 'finetune':
-        agg_scores_rater = AggScoresRater(model_path='model_finetune.pt')
+    agg_scores_rater = AggScoresRater(model_path=f'model_{model}.pt')
 
     agg_scores = dict()
     warning_counter = WarningCounter(MEMBERS_PATH)
     warnings = dict()
 
-    for committee_id in protocol_getter.committee_ids:
-        protocols: Dict[int, str] = protocol_getter.get_meeting_protocols(committee_id, limit=10)
+    
+    protocols2paths: Dict[int, str] = protocol_getter.get_protocols_paths(category_id, limit=10)
+
+    for id in list(protocols2paths.keys()):
+        if id in warnings:
+            print(f'warning: protocol with id {id} already in warnings')
         
-        # warnings = {id: warning_counter.count_warnings(protocol) for id, protocol in protocols.items()}
-        for id, text in protocols.items():
-            if id in warnings:
-                print(f'warning: protocol with id {id} already in warnings')
-            warnings[id] = warning_counter.count_warnings(text)
-            score = agg_scores_rater.rate_aggressiveness(text)
-            if id in agg_scores:
-                print(f'warning: protocol with id {id} already in agg_scores')
-            agg_scores[id] = score
+        # count warnings and rate aggressiveness of current protocol
+        text = protocol_getter.get_meeting_protocol_text(protocols2paths[id])
+        warnings[id] = warning_counter.count_warnings(text)
+        score = agg_scores_rater.rate_aggressiveness(text)
 
-            protocols[id] = None
-            del text
+        if id in agg_scores:
+            print(f'warning: protocol with id {id} already in agg_scores')
+        agg_scores[id] = score
 
-        del protocols
+    
+        # clear memory to avoid memory leak
+        del protocols2paths[id]
+        protocols2paths[id] = None
+        del text
+        text = None
+
+    del protocols2paths
+    protocols2paths = None
+
         
-        total_warnings = warning_counter.total_warnings
-        # top_warnings = sorted(total_warnings.items(), key=lambda x: sum(x[1]), reverse=True)[:10]
+    total_warnings = warning_counter.total_warnings
 
-        # print('top warnings:')
-        # for warn in top_warnings:
-        #     print(warn)
+    print(f'average agg score for model {model}:', np.mean(list(agg_scores.items())))
 
-        print(f'average agg score for model {model}:', np.mean(list(agg_scores.items())))
+    with open(f'results/agg_scores_{model}_{knesset_num}_{category_id}.pkl', 'wb') as f:
+        pickle.dump(agg_scores, f)
 
-        with open(f'results/agg_scores_{model}_{knesset_num}_{category_id}.pkl', 'wb') as f:
-            pickle.dump(agg_scores, f)
+    with open(f'results/total_warnings_{model}_{knesset_num}_{category_id}.pkl', 'wb') as f:
+        pickle.dump(total_warnings, f)
 
-        with open(f'results/total_warnings_{model}_{knesset_num}_{category_id}.pkl', 'wb') as f:
-            pickle.dump(total_warnings, f)
-
-        with open(f'results/warnings_{model}_{knesset_num}_{category_id}.pkl', 'wb') as f:
-            pickle.dump(warnings, f)
+    with open(f'results/warnings_{model}_{knesset_num}_{category_id}.pkl', 'wb') as f:
+        pickle.dump(warnings, f)
 
 
 if __name__ == '__main__':

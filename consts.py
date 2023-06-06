@@ -1,3 +1,5 @@
+import re
+
 # Committee id's
 MESADERET_24_COM_ID = 2215
 KNESSET_24_COM_ID = 3991
@@ -15,7 +17,7 @@ LAW_ORDER_COM_CATEGORY_ID = 6
 
 COMMITTEES_PATH = 'kns_csv_files/kns_committee.csv'
 MEMBERS_PATH = 'kns_csv_files/kns_person.csv'
-MIN_KNESSET_NUM = 24
+MIN_KNESSET_NUM = 20
 MAX_KNESSET_NUM = 25
 CATEGORY_IDS = [MONEY_COM_CATEGORY_ID, DEFENSE_COM_CATEGORY_ID, LAW_ORDER_COM_CATEGORY_ID, MESADERET_COM_CATEGORY_ID, KNESSET_COM_CATEGORY_ID]
 
@@ -34,3 +36,19 @@ _regex4 = '<< דובר >>.*\n\n.*\n\n.*יו"ר.*\n\n.*קריאה ה?שני'
 _regex5 = '<< דובר >>.*\n\n.*\n\n.*יו"ר.*\n\n.*פעם ה?שליש'
 _regex6 = '<< דובר >>.*\n\n.*\n\n.*יו"ר.*\n\n.*קריאה ה?שליש'
 WARNING_REGEX = '|'.join([_regex1, _regex2, _regex3, _regex4, _regex5, _regex6])
+
+def filter_protocol_sentences(self, text: str) -> str:
+    ind = re.search("<< יור >>", text)
+
+    if ind is None:
+        return None
+
+    txt2 = text[ind.span()[0]:]
+    txt2 = re.sub("<<.*","", txt2)
+    txt2 = re.sub(">>.*","", txt2)
+    txt2 = re.sub(".*:","", txt2)
+    txt2 = re.sub("-", " ", txt2)
+    txt2 = re.sub("\n\s+","\n", txt2)
+    txt2 = re.sub(" +"," ", txt2)
+    txt2 = re.sub("\t","", txt2)
+    return txt2
