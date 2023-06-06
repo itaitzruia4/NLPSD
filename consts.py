@@ -37,7 +37,7 @@ _regex5 = '<< דובר >>.*\n\n.*\n\n.*יו"ר.*\n\n.*פעם ה?שליש'
 _regex6 = '<< דובר >>.*\n\n.*\n\n.*יו"ר.*\n\n.*קריאה ה?שליש'
 WARNING_REGEX = '|'.join([_regex1, _regex2, _regex3, _regex4, _regex5, _regex6])
 
-def filter_protocol_sentences(self, text: str) -> str:
+def filter_protocol_sentences(text: str) -> str:
     ind = re.search("<< יור >>", text)
 
     if ind is None:
