@@ -15,9 +15,17 @@ LAW_ORDER_COM_CATEGORY_ID = 6
 
 COMMITTEES_PATH = 'kns_csv_files/kns_committee.csv'
 MEMBERS_PATH = 'kns_csv_files/kns_person.csv'
-MIN_KNESSET_NUM = 21
-MAX_KNESSET_NUM = 23
+MIN_KNESSET_NUM = 24
+MAX_KNESSET_NUM = 25
 CATEGORY_IDS = [MONEY_COM_CATEGORY_ID, DEFENSE_COM_CATEGORY_ID, LAW_ORDER_COM_CATEGORY_ID, MESADERET_COM_CATEGORY_ID, KNESSET_COM_CATEGORY_ID]
+
+CATEGORY_ID_TO_NAME = {
+    MONEY_COM_CATEGORY_ID: 'ועדת כספים',
+    DEFENSE_COM_CATEGORY_ID: 'ועדת חוץ ובטחון',
+    LAW_ORDER_COM_CATEGORY_ID: 'ועדת חוק חוקה ומשפט',
+    MESADERET_COM_CATEGORY_ID: 'הועדה המסדרת',
+    KNESSET_COM_CATEGORY_ID: 'ועדת הכנסת'
+}
 
 _regex1 = '<< דובר >>.*\n\n.*\n\n.*יו"ר.*\n\n.*פעם ה?ראש'
 _regex2 = '<< דובר >>.*\n\n.*\n\n.*יו"ר.*\n\n.*קריאה ה?ראש'
@@ -26,4 +34,3 @@ _regex4 = '<< דובר >>.*\n\n.*\n\n.*יו"ר.*\n\n.*קריאה ה?שני'
 _regex5 = '<< דובר >>.*\n\n.*\n\n.*יו"ר.*\n\n.*פעם ה?שליש'
 _regex6 = '<< דובר >>.*\n\n.*\n\n.*יו"ר.*\n\n.*קריאה ה?שליש'
 WARNING_REGEX = '|'.join([_regex1, _regex2, _regex3, _regex4, _regex5, _regex6])
-
