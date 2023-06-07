@@ -60,8 +60,9 @@ def get_meeting_protocol_text(text_path: str) -> str:
         
 if __name__ == '__main__':
     # main()
-    protocol_id = 2158400
-    path = 'files/2/1/2158400.txt'
-    text = get_meeting_protocol_text(path)
-    with open(f'protocols/{protocol_id}.txt', 'w', encoding='utf-8') as f:
-        f.write(text)
+    protocol_id = 2200827
+    with open(f'protocols/{protocol_id}.txt', 'r', encoding='utf-8') as f:
+        text = f.read()
+    filtered_text = filter_protocol_sentences(text)
+    with open(f'filtered_protocols/{protocol_id}.txt', 'w', encoding='utf-8') as f:
+        f.write(filtered_text)

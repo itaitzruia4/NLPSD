@@ -21,8 +21,9 @@ def main():
     warning_counter = WarningCounter(MEMBERS_PATH)
     warnings = dict()
 
-    for category_id in category_ids:
-        protocols2paths: Dict[int, str] = protocol_getter.get_protocols_paths(category_id)
+    for committee_id in protocol_getter.committee_ids:
+        protocols2paths: Dict[int, str] = protocol_getter.get_protocols_paths(committee_id)
+        # print(f'fetched {len(protocols2paths)} protocols for category {committee_id}')
         
         for id in list(protocols2paths.keys()):
             if id in warnings:
@@ -33,10 +34,13 @@ def main():
             filtered_text = filter_protocol_sentences(text)
 
             if filtered_text is None:
+                print(f'warning: skipping protocol with id {id}')
                 del text
                 del protocols2paths[id]
                 protocols2paths[id] = None
                 continue
+
+            # print('analyzing protocol with id', id)
             
             warnings[id] = warning_counter.count_warnings(text)
             sentences = filtered_text.split('\n')
