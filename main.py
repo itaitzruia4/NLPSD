@@ -16,60 +16,47 @@ def main():
 
     model = 'finetune'
     agg_scores_rater = AggScoresRater(model_path=f'model_{model}.pt')
-
-    agg_scores = dict()
     warning_counter = WarningCounter(MEMBERS_PATH)
-    warnings = dict()
 
     for committee_id in protocol_getter.committee_ids:
         protocols2paths: Dict[int, str] = protocol_getter.get_protocols_paths(committee_id)
-        # print(f'fetched {len(protocols2paths)} protocols for category {committee_id}')
         
-        for id in list(protocols2paths.keys()):
-            if id in warnings:
-                print(f'warning: protocol with id {id} already in warnings')
-            
+        for session_id in list(protocols2paths.keys()):
             # count warnings and rate aggressiveness of current protocol
-            text = protocol_getter.get_meeting_protocol_text(protocols2paths[id])
+            text = protocol_getter.get_meeting_protocol_text(protocols2paths[session_id])
             filtered_text = filter_protocol_sentences(text)
 
             if filtered_text is None:
-                print(f'warning: skipping protocol with id {id}')
+                print(f'warning: skipping protocol with id {session_id}')
                 del text
-                del protocols2paths[id]
-                protocols2paths[id] = None
+                del protocols2paths[session_id]
+                protocols2paths[session_id] = None
                 continue
 
-            # print('analyzing protocol with id', id)
             
-            warnings[id] = warning_counter.count_warnings(text)
+            warnings = warning_counter.count_warnings(text)
             sentences = filtered_text.split('\n')
-            score = agg_scores_rater.rate_aggressiveness(sentences)
+            agg_score = agg_scores_rater.rate_aggressiveness(sentences)
 
-            if id in agg_scores:
-                print(f'warning: protocol with id {id} already in agg_scores')
-            agg_scores[id] = score
+            results = {
+                'warnings': warnings,
+                'agg_score': agg_score
+            }
 
+            # save results to pickle files
+            with open(f'results/{model}_{session_id}.pkl', 'wb') as f:
+                pickle.dump(results, f)
         
             # clear memory to avoid memory leak
-            del protocols2paths[id]
-            protocols2paths[id] = None
+            del protocols2paths[session_id]
+            protocols2paths[session_id] = None
             del text
+            del filtered_text
             
 
         del protocols2paths
         protocols2paths = None
 
-    # save results to pickle files
-    with open(f'results/warnings_{model}.pkl', 'wb') as f:
-        pickle.dump(warnings, f)
-
-    with open(f'results/agg_scores_{model}.pkl', 'wb') as f:
-        pickle.dump(agg_scores, f)
-
-    total_warnings = warning_counter.total_warnings
-    with open(f'results/total_warnings_{model}.pkl', 'wb') as f:
-        pickle.dump(total_warnings, f)
 
     # print(f'average agg score for model {model}:', np.mean(list(agg_scores.values())))
 
