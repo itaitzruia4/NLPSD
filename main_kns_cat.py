@@ -1,5 +1,5 @@
 import numpy as np
-from typing import Dict
+from typing import Dict, List
 import pickle
 import sys
 
@@ -28,50 +28,29 @@ def main():
     model = 'finetune'
     agg_scores_rater = AggScoresRater(model_path=f'model_{model}.pt')
 
-    agg_scores = dict()
     warning_counter = WarningCounter(MEMBERS_PATH)
-    warnings = dict()
 
+    assert len(protocol_getter.committee_ids) == 1
+    protocols2paths: Dict[int, str] = protocol_getter.get_protocols_paths(protocol_getter.committee_ids[0], limit=10)
     
-    protocols2paths: Dict[int, str] = protocol_getter.get_protocols_paths(category_id, limit=10)
-
     for id in list(protocols2paths.keys()):
-        if id in warnings:
-            print(f'warning: protocol with id {id} already in warnings')
-        
         # count warnings and rate aggressiveness of current protocol
         text = protocol_getter.get_meeting_protocol_text(protocols2paths[id])
-        warnings[id] = warning_counter.count_warnings(text)
-        score = agg_scores_rater.rate_aggressiveness(text)
+        filtered_text = filter_protocol_sentences(text)
+        
+        warnings: Dict[str, List[int]] = warning_counter.count_warnings(text)
+        sentences = filtered_text.split('\n')
+        agg_score = agg_scores_rater.rate_aggressiveness(sentences)
 
-        if id in agg_scores:
-            print(f'warning: protocol with id {id} already in agg_scores')
-        agg_scores[id] = score
+    results = {
+        'warnings': warnings,
+        'agg_score': agg_score
+    }
+
+    # save results to pickle files
+    with open(f'results/{model}_{knesset_num}_{category_id}.pkl', 'wb') as f:
+        pickle.dump(results, f)
 
     
-        # clear memory to avoid memory leak
-        del protocols2paths[id]
-        protocols2paths[id] = None
-        del text
-        text = None
-
-    del protocols2paths
-    protocols2paths = None
-
-        
-    total_warnings = warning_counter.total_warnings
-
-    print(f'average agg score for model {model}:', np.mean(list(agg_scores.items())))
-
-    with open(f'results/agg_scores_{model}_{knesset_num}_{category_id}.pkl', 'wb') as f:
-        pickle.dump(agg_scores, f)
-
-    with open(f'results/total_warnings_{model}_{knesset_num}_{category_id}.pkl', 'wb') as f:
-        pickle.dump(total_warnings, f)
-
-    with open(f'results/warnings_{model}_{knesset_num}_{category_id}.pkl', 'wb') as f:
-        pickle.dump(warnings, f)
-
-
 if __name__ == '__main__':
     main()
