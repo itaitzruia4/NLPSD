@@ -51,7 +51,7 @@ class WarningCounter:
         matches = re.findall(WARNING_REGEX, text, flags=re.MULTILINE)
         for match in matches:
             sentences = match.split('\n')
-            first_sentence, last_sentence = set(sentences[0]), set(sentences[-1])
+            first_sentence, last_sentence = sentences[0], sentences[-1]
             for kns_member in self.knesset_members:
                 if kns_member in first_sentence:
                     for word, idx in word2idx.items():

@@ -30,7 +30,6 @@ def main():
 
     warning_counter = WarningCounter(MEMBERS_PATH)
 
-    assert len(protocol_getter.committee_ids) == 1
     protocols2paths: Dict[int, str] = protocol_getter.get_protocols_paths(protocol_getter.committee_ids[0], limit=10)
     
     for id in list(protocols2paths.keys()):
