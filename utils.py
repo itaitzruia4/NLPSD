@@ -1,4 +1,5 @@
 import re
+from collections import Counter
 
 # Committee id's
 MESADERET_24_COM_ID = 2215
@@ -56,3 +57,21 @@ def filter_protocol_sentences(text: str) -> str:
     txt2 = re.sub(" +"," ", txt2)
     txt2 = re.sub("\t","", txt2)
     return txt2
+
+def get_speakers_info(txt, knesset_members):
+  '''
+  returns:
+  1) counter of Knesset members talking rights
+  2) number of people got talking rights
+  3) number of talking rights
+  '''
+
+  findings = re.findall("<< דובר >>.+<< דובר >>", txt)
+  findings_counter = Counter(findings)
+  knesset_rights_counter = {}
+  for name, number in findings_counter.items():
+    for member in knesset_members:
+      if member in name:
+        knesset_rights_counter[member] = number
+        break
+  return knesset_rights_counter, len(findings_counter), len(findings)
