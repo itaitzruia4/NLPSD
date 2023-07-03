@@ -1,7 +1,7 @@
 import re
 import pandas as pd
 from typing import List, Tuple
-from consts import WARNING_REGEX
+from utils import WARNING_REGEX
 
 
 class WarningCounter:

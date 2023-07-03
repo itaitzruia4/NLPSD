@@ -1,4 +1,4 @@
-from consts import *
+import utils
 import numpy as np
 import pandas as pd
 from typing import Dict, List, Tuple
@@ -8,25 +8,25 @@ from collections import Counter
 
 class Statistics:
     def __init__(self):
-        df = pd.read_csv(COMMITTEES_PATH)
+        df = pd.read_csv(utils.COMMITTEES_PATH)
         df = df[['CommitteeID', 'CategoryID', 'KnessetNum']]
-        df = df[df['KnessetNum'] >= MIN_KNESSET_NUM]
-        df = df[df['CategoryID'].isin(CATEGORY_IDS)]
+        df = df[df['KnessetNum'] >= utils.MIN_KNESSET_NUM]
+        df = df[df['CategoryID'].isin(utils.CATEGORY_IDS)]
 
         categories2committees = {category_id: df[df['CategoryID'] == category_id]['CommitteeID'].to_list() for category_id in CATEGORY_IDS}
 
         committee_session_df = pd.read_csv('kns_csv_files/kns_committeesession.csv')
-        committee_session_df = committee_session_df[committee_session_df['KnessetNum'] >= MIN_KNESSET_NUM]
+        committee_session_df = committee_session_df[committee_session_df['KnessetNum'] >= utils.MIN_KNESSET_NUM]
 
-        knesset_categories_sessions = dict.fromkeys(range(MIN_KNESSET_NUM, MAX_KNESSET_NUM + 1))
+        knesset_categories_sessions = dict.fromkeys(range(utils.MIN_KNESSET_NUM, utils.MAX_KNESSET_NUM + 1))
         for knesset_num in knesset_categories_sessions:
-            knesset_categories_sessions[knesset_num] = dict.fromkeys(CATEGORY_IDS)
+            knesset_categories_sessions[knesset_num] = dict.fromkeys(utils.CATEGORY_IDS)
             for category_id in knesset_categories_sessions[knesset_num]:
                 knesset_categories_sessions[knesset_num][category_id] = committee_session_df[(committee_session_df['KnessetNum'] == knesset_num) & (committee_session_df['CommitteeID'].isin(categories2committees[category_id]))]['CommitteeSessionID'].to_list()
 
         self.knesset_categories_sessions = knesset_categories_sessions
 
-        knesset_members_df = pd.read_csv(MEMBERS_PATH)
+        knesset_members_df = pd.read_csv(utils.MEMBERS_PATH)
         first_names, last_names = knesset_members_df['FirstName'].to_list(), knesset_members_df['LastName'].to_list()
         self.knesset_members = [' '.join([first_name, last_name]) for first_name, last_name in zip(first_names, last_names)]
 
@@ -51,19 +51,19 @@ class Statistics:
             for category, sessions in self.knesset_categories_sessions[knesset]:
                 tmp_category_to_session[category] = len(sessions)
             n_sessions_per_committee_dict[knesset] = tmp_category_to_session
-        bottom = {CATEGORY_ID_TO_NAME[cat]: 0 for cat in CATEGORY_IDS}
+        bottom = {utils.CATEGORY_ID_TO_NAME[cat]: 0 for cat in utils.CATEGORY_IDS}
         for kns, cat_ses_dct in n_sessions_per_committee_dict.items():
             cats = []
             sess = []
             bots = []
             for cat, ses in cat_ses_dct.items():
-                cats.append('\n'.join(CATEGORY_ID_TO_NAME[cat][::-1].split()[::-1]))
+                cats.append('\n'.join(utils.CATEGORY_ID_TO_NAME[cat][::-1].split()[::-1]))
                 sess.append(ses)
-                bots.append(bottom[CATEGORY_ID_TO_NAME[cat]])
+                bots.append(bottom[utils.CATEGORY_ID_TO_NAME[cat]])
             fig = plt.bar(cats, sess, label= kns, bottom= bots)
             plt.bar_label(fig, sess)
             for cat, ses in cat_ses_dct.items():
-                bottom[CATEGORY_ID_TO_NAME[cat]] += ses
+                bottom[utils.CATEGORY_ID_TO_NAME[cat]] += ses
         plt.legend()
         plt.show()
 
@@ -119,8 +119,8 @@ class Statistics:
             }
         }
         '''
-        warnings_per_categories = dict.fromkeys(CATEGORY_IDS)
-        n_protocols_per_categories = dict.fromkeys(CATEGORY_IDS)
+        warnings_per_categories = dict.fromkeys(utils.CATEGORY_IDS)
+        n_protocols_per_categories = dict.fromkeys(utils.CATEGORY_IDS)
         for category_id in warnings_per_categories:
             warnings_per_categories[category_id] = dict.fromkeys(self.knesset_members)
             n_protocols_per_categories[category_id] = 0
@@ -221,9 +221,9 @@ class Statistics:
             category_id: n_protocols
         }
         '''
-        n_protocols_per_categories = dict.fromkeys(CATEGORY_IDS)
-        agg_scores_per_categories = dict.fromkeys(CATEGORY_IDS)
-        for category_id in CATEGORY_IDS:
+        n_protocols_per_categories = dict.fromkeys(utils.CATEGORY_IDS)
+        agg_scores_per_categories = dict.fromkeys(utils.CATEGORY_IDS)
+        for category_id in utils.CATEGORY_IDS:
             curr_agg_scores = []
             for knesset_num in self.knesset_categories_sessions:
                 curr_agg_scores += [

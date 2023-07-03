@@ -6,7 +6,7 @@ import sys
 from protocol_getter import ProtocolGetter
 from warning_counter import WarningCounter
 from agg_scores_rater import AggScoresRater
-from consts import *
+from utils import *
 
 
 def main():
