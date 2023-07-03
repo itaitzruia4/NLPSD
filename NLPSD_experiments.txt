@@ -6,16 +6,22 @@ main after 1500 fine tune		6846891
 print misclassified sentences finetune	834288
 
 knesset 25 category 1 (knesset)		
-knesset 25 category 2 (money)		7329166
-knesset 25 category 4 (defense)		7329167
-knesset 25 category 6 (law and order)	7329169
+knesset 25 category 2 (money)		
+knesset 25 category 4 (defense)		
+knesset 25 category 6 (law and order)	
 knesset 25 category 689 (mesaderet)	
 
 knesset 24 category 1 (knesset)		
-knesset 24 category 2 (money)		7329164
-knesset 24 category 4 (defense)		7329165
-knesset 24 category 6 (law and order)	7329168
-kns 24 cat 6 - attempt 2		
+knesset 24 category 2 (money)		
+knesset 24 category 4 (defense)		
+knesset 24 category 6 (law and order)	
 knesset 24 category 689 (mesaderet)	
 
-complete pipeline (6 knessets 5 categories)	7329170
+knesset 23 category 1 (knesset)		
+knesset 23 category 2 (money)		
+knesset 23 category 4 (defense)		
+knesset 23 category 6 (law and order)	
+knesset 23 category 689 (mesaderet)	
+
+complete pipeline (6 knessets 20-22 5 categories)	
+complete pipeline (3 knessets 23-25 5 categories)	

@@ -7,8 +7,11 @@ from consts import WARNING_REGEX
 class WarningCounter:
     def __init__(self, members_file_path: str):
         knesset_members_df = pd.read_csv(members_file_path)
-        first_names, last_names = knesset_members_df['FirstName'].to_list(), knesset_members_df['LastName'].to_list()
-        knesset_members = [' '.join([first_name, last_name]) for first_name, last_name in zip(first_names, last_names)]
+        first_names = knesset_members_df['FirstName'].to_list()
+        last_names = knesset_members_df['LastName'].to_list()
+        knesset_members = [' '.join([first_name, last_name])
+                           for first_name, last_name
+                           in zip(first_names, last_names)]
 
         self.total_warnings = {mem: [0, 0, 0] for mem in knesset_members}
 
@@ -16,7 +19,7 @@ class WarningCounter:
         new_first_names, new_last_names = [], []
 
         for fn, ln in zip(first_names, last_names):
-            names = re.findall('\w+', fn)
+            names = fn.replace('-', ' ').split(' ')
             
             for name in names:
                 self.total_warnings[name + ' ' + ln] = self.total_warnings[fn + ' ' + ln]
@@ -27,7 +30,10 @@ class WarningCounter:
         first_names = new_first_names
         last_names = new_last_names
 
-        self.knesset_members = [' '.join([first_name, last_name]) for first_name, last_name in zip(first_names, last_names)]
+        self.knesset_members = [
+            ' '.join([first_name, last_name]) 
+            for first_name, last_name in zip(first_names, last_names)
+        ]
 
     def count_warnings(self, text) -> Tuple[dict, int]:
         """
@@ -59,5 +65,7 @@ class WarningCounter:
                             self.total_warnings[kns_member][idx] += 1
                             local_warnings[kns_member][idx] += 1
                             break
+        n_matches = len(matches)
+        del matches
         
-        return local_warnings, len(matches)
+        return local_warnings, n_matches

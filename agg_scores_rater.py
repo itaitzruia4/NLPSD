@@ -20,10 +20,13 @@ class AggScoresRater:
         with torch.no_grad():
             inputs = self.tokenizer(sentences, padding=True, truncation=True, return_tensors='pt').to(self.device)
             outputs = self.model(**inputs, return_dict=False)[0].to(self.device)
+            del inputs
 
             _, predicted = torch.max(outputs.data, 1)
-            print
+            del outputs
+
             total += predicted.size(0)
             aggressive += predicted.sum().item()
+            del predicted
 
         return aggressive / total
