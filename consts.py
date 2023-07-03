@@ -22,11 +22,11 @@ MAX_KNESSET_NUM = 25
 CATEGORY_IDS = [MONEY_COM_CATEGORY_ID, DEFENSE_COM_CATEGORY_ID, LAW_ORDER_COM_CATEGORY_ID, MESADERET_COM_CATEGORY_ID, KNESSET_COM_CATEGORY_ID]
 
 CATEGORY_ID_TO_NAME = {
-    MONEY_COM_CATEGORY_ID: 'ועדת כספים',
-    DEFENSE_COM_CATEGORY_ID: 'ועדת חוץ ובטחון',
-    LAW_ORDER_COM_CATEGORY_ID: 'ועדת חוק חוקה ומשפט',
-    MESADERET_COM_CATEGORY_ID: 'הועדה המסדרת',
-    KNESSET_COM_CATEGORY_ID: 'ועדת הכנסת'
+    MONEY_COM_CATEGORY_ID: 'finance',
+    DEFENSE_COM_CATEGORY_ID: 'defense',
+    LAW_ORDER_COM_CATEGORY_ID: 'law and order',
+    MESADERET_COM_CATEGORY_ID: 'mesaderet',
+    KNESSET_COM_CATEGORY_ID: 'knesset'
 }
 
 _regex1 = '<< דובר >>.*\n\n.*\n\n.*יו"ר.*\n\n.*פעם ה?ראש'
