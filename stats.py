@@ -5,13 +5,14 @@ from typing import Dict, List, Tuple
 import matplotlib.pyplot as plt
 from collections import Counter
 
+CATEGORY_IDS = [4]
 
 class Statistics:
     def __init__(self):
         df = pd.read_csv(utils.COMMITTEES_PATH)
         df = df[['CommitteeID', 'CategoryID', 'KnessetNum']]
         df = df[df['KnessetNum'] >= utils.MIN_KNESSET_NUM]
-        df = df[df['CategoryID'].isin(utils.CATEGORY_IDS)]
+        df = df[df['CategoryID'].isin(CATEGORY_IDS)]
 
         categories2committees = {category_id: df[df['CategoryID'] == category_id]['CommitteeID'].to_list() for category_id in CATEGORY_IDS}
 
