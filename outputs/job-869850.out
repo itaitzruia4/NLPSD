@@ -1,0 +1,8 @@
+SLURM_JOBID=869850
+SLURM_JOB_NODELIST=ise-titan-01
+GPU 0: NVIDIA TITAN RTX (UUID: GPU-0968b2bc-056e-4fa7-9c1e-3ae773a37d31)
+committee id: 2081
+fetched 9 sessions
+0 documented sessions
+0 unique documented sessions
+fetched 0 protocols)

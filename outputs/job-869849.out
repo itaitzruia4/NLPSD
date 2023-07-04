@@ -1,0 +1,9 @@
+SLURM_JOBID=869849
+SLURM_JOB_NODELIST=ise-titan-01
+GPU 0: NVIDIA TITAN RTX (UUID: GPU-0968b2bc-056e-4fa7-9c1e-3ae773a37d31)
+Traceback (most recent call last):
+  File "/sise/home/itaitz/NLPSD/main.py", line 88, in <module>
+    main()
+  File "/sise/home/itaitz/NLPSD/main.py", line 35, in main
+    committee_id = protocol_getter.committee_ids[0]
+IndexError: list index out of range

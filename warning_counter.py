@@ -27,8 +27,8 @@ class WarningCounter:
                 new_last_names.append(ln)
 
         # update first and last names
-        first_names = new_first_names
-        last_names = new_last_names
+        first_names += new_first_names
+        last_names += new_last_names
 
         self.knesset_members = [
             ' '.join([first_name, last_name]) 

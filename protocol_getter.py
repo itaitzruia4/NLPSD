@@ -33,14 +33,14 @@ class ProtocolGetter:
         else:
             raise ValueError(f"Failed to retrieve content. Status code: {response.status_code}")
 
-    def get_protocols_paths(self, committee_id, limit=None) -> Dict[int, str]:
+    def get_protocols_paths(self, committee_id, start=0, limit=None) -> Dict[int, str]:
         com_session_df = pd.read_csv('kns_csv_files/kns_committeesession.csv')
         com_session_df = com_session_df[com_session_df['CommitteeID'] == committee_id]
         com_session_df.dropna(subset=['text_parsed_filename'], inplace=True)
         com_session_df.drop_duplicates(subset=['text_parsed_filename'], inplace=True, keep='last')
 
-        session_ids = com_session_df['CommitteeSessionID'].astype(int).to_list()
-        text_paths = com_session_df['text_parsed_filename'].to_list()
+        session_ids = com_session_df['CommitteeSessionID'].astype(int).to_list()[start:]
+        text_paths = com_session_df['text_parsed_filename'].to_list()[start:]
 
         if limit is not None:
             session_ids = session_ids[:limit]

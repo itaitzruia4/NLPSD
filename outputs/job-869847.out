@@ -1,0 +1,5 @@
+SLURM_JOBID=869847
+SLURM_JOB_NODELIST=cs-6000-01
+GPU 0: NVIDIA RTX 6000 Ada Generation (UUID: GPU-07c3b03c-b740-fd42-782d-fe45e93f6ff6)
+/var/spool/slurmd/job869847/slurm_script: line 21: 60371 Killed                  python $1 $2 $3
+slurmstepd: error: Detected 1 oom-kill event(s) in StepId=869847.batch. Some of your processes may have been killed by the cgroup out-of-memory handler.
