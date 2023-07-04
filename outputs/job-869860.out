@@ -1,0 +1,8 @@
+SLURM_JOBID=869860
+SLURM_JOB_NODELIST=ise-pheno-05
+GPU 0: NVIDIA GeForce RTX 3090 (UUID: GPU-c01ca0ba-05dc-8362-a1ff-ede1c5322c3b)
+committee id: 2119
+fetched 0 sessions
+0 documented sessions
+0 unique documented sessions
+fetched 0 protocols)

@@ -1,0 +1,9 @@
+SLURM_JOBID=869858
+SLURM_JOB_NODELIST=ise-pheno-25
+GPU 0: NVIDIA GeForce GTX 1080 Ti (UUID: GPU-23ef40bf-a97d-9e73-65b0-e6b0bf7fb0ea)
+committee id: 2110
+fetched 8 sessions
+7 documented sessions
+7 unique documented sessions
+fetched 7 protocols)
+warning: skipping protocol with id 2084270

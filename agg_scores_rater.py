@@ -30,3 +30,4 @@ class AggScoresRater:
             del predicted
 
         return aggressive / total
+    
