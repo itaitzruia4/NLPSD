@@ -43,10 +43,16 @@ def main():
         text = protocol_getter.get_meeting_protocol_text(protocols2paths[session_id])
         del protocols2paths[session_id]
 
-        speaker_cnt, n_speakers, n_speaks = utils.get_speakers_info(text, warning_counter.knesset_members)
+        old_format = utils.is_old_format(text)
 
-        warnings, n_warnings = warning_counter.count_warnings(text)
-        filtered_text = utils.filter_protocol_sentences(text)
+        speaker_cnt, n_speakers, n_speaks = utils.get_speakers_info(
+            text,
+            warning_counter.knesset_members,
+            old_format=old_format
+        )
+
+        warnings = warning_counter.count_warnings(text, old_format)
+        filtered_text = utils.filter_protocol_sentences(text, old_format)
         del text
 
         if filtered_text is None:
@@ -68,7 +74,6 @@ def main():
             'speaker_cnt': speaker_cnt,
             'n_speakers': n_speakers,
             'n_speaks': n_speaks,
-            'n_warnings': n_warnings,
             'agg_score': agg_score
         }
 

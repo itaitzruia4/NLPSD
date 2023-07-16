@@ -10,7 +10,9 @@ class AggScoresRater:
         self.tokenizer = AutoTokenizer.from_pretrained('onlplab/alephbert-base')
         self.model = torch.load(model_path)
 
-    def rate_aggressiveness(self, sentences: List[str]) -> float:
+    def rate_aggressiveness(self,
+                            sentences: List[str],
+                            verboose=False) -> float:
         # Evaluate model
         self.model.eval()
 
