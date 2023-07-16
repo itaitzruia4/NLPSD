@@ -52,15 +52,17 @@ def filter_protocol_sentences(text: str) -> str:
     txt2 = re.sub("\t","", txt2)
     return txt2
 
-def get_speakers_info(txt, knesset_members):
+def get_speakers_info(txt, knesset_members, old_format= False):
   '''
   returns:
   1) counter of Knesset members talking rights
   2) number of people got talking rights
   3) number of talking rights
   '''
-
-  findings = re.findall("<< דובר >>.+<< דובר >>", txt)
+  if old_format:
+     findings = re.findall(".*:", txt)
+  else:
+    findings = re.findall("<< דובר >>.+<< דובר >>", txt)
   findings_counter = Counter(findings)
   knesset_rights_counter = {}
   for name, number in findings_counter.items():
