@@ -1,5 +1,6 @@
 # Automatic Detection of Warnings and Removals in Knesset Committee Meetings
-The final project for the Natural Language Processing and Social Dynamics course at the Ben-Gurion University of the Negev, supervised by [Dr. Oren Tsur](https://www.naslab.ise.bgu.ac.il/orentsur).
+The final project for the Natural Language Processing and Social Dynamics course at the Ben-Gurion University of the Negev,
+supervised by [Dr. Oren Tsur](https://www.naslab.ise.bgu.ac.il/orentsur).
 
 ## Introduction
 This project aims to automatically detect warnings and removals in Knesset committee meetings, and evaluate the level of aggressiveness exhibited in these meetings. The project utilizes a combination of regular expression (regex) based warning detection and a fine-tuned [AlephBert](https://huggingface.co/onlplab/alephbert-base) model for aggressiveness scoring. The data used in this project consists of 1653 meeting protocols from Knesset 20 to Knesset 25, focusing on the following committees: Knesset Committee, Finance Committee, Defense Committee, Law and Order Committee, and Science and Technology Committee.
