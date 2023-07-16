@@ -1,5 +1,6 @@
 from typing import List, Dict
 import pandas as pd
+from copy import deepcopy
 import requests
 
 class ProtocolGetter:
@@ -9,7 +10,6 @@ class ProtocolGetter:
                  max_knesset_num: int,
                  category_ids: List[int]):
         df = pd.read_csv(committees_path)
-        df = df[['CommitteeID', 'CategoryID', 'KnessetNum']]
         df = df[df['KnessetNum'] >= min_knesset_num]
         df = df[df['KnessetNum'] <= max_knesset_num]
         df = df[df['CategoryID'].isin(category_ids)]
@@ -18,6 +18,7 @@ class ProtocolGetter:
         self.committee_ids = committee_ids
 
         self.categories2committees = {category_id: df[df['CategoryID'] == category_id]['CommitteeID'].to_list() for category_id in category_ids}
+        del df
 
         self.meeting_protocol_base_url = 'https://production.oknesset.org/pipelines/data/committees/meeting_protocols_text/'
 
@@ -27,9 +28,11 @@ class ProtocolGetter:
 
         # Check if the request was successful (status code 200)
         if response.status_code == 200:
-            response.encoding = 'utf-8'
             # Retrieve the content of the file
-            return response.text
+            response.encoding = 'utf-8'
+            text = deepcopy(response.text)
+            del response
+            return text
         else:
             raise ValueError(f"Failed to retrieve content. Status code: {response.status_code}")
 
@@ -41,6 +44,7 @@ class ProtocolGetter:
 
         session_ids = com_session_df['CommitteeSessionID'].astype(int).to_list()[start:]
         text_paths = com_session_df['text_parsed_filename'].to_list()[start:]
+        del com_session_df
 
         if limit is not None:
             session_ids = session_ids[:limit]

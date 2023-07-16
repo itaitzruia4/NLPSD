@@ -77,6 +77,8 @@ class WarningCounter:
                             self.warnings[kns_member][idx] += 1
                             found = True
         del matches
+        del first_sentence
+        del last_sentence
 
         # keep a copy of the warnings
         result = deepcopy(self.warnings)

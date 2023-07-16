@@ -46,7 +46,7 @@ _old_regex4 = '.*:\n\n.*\n\n.*יו"ר.*\n\n.*קריאה ה?שני'
 _old_regex5 = '.*:\n\n.*\n\n.*יו"ר.*\n\n.*פעם ה?שליש'
 _old_regex6 = '.*:\n\n.*\n\n.*יו"ר.*\n\n.*קריאה ה?שליש'
 OLD_WARNING_REGEX = "|".join(
-    [_old_regex1, _old_regex2, _old_regex3,_old_regex4, _old_regex5, _old_regex6]
+    [_old_regex1, _old_regex2, _old_regex3, _old_regex4, _old_regex5, _old_regex6]
 )
 
 
@@ -57,11 +57,9 @@ def is_old_format(text):
 def filter_protocol_sentences(text: str, old_format=False) -> str:
     pattern = 'היו"ר.*:' if old_format else "<< יור >>"
     ind = re.search(pattern, text)
-
-    if ind is None:
-        return None
-
     txt2 = text[ind.span()[0]:]
+    del ind
+
     txt2 = re.sub("<<.*", "", txt2)
     txt2 = re.sub(">>.*", "", txt2)
     txt2 = re.sub(".*:", "", txt2)
@@ -72,20 +70,27 @@ def filter_protocol_sentences(text: str, old_format=False) -> str:
     return txt2
 
 
-def get_speakers_info(txt, knesset_members):
+def get_speakers_info(txt, knesset_members, old_format=False):
     """
     returns:
     1) counter of Knesset members talking rights
     2) number of people got talking rights
     3) number of talking rights
     """
-
-    findings = re.findall("<< דובר >>.+<< דובר >>", txt)
+    if old_format:
+        findings = re.findall(".*:", txt)
+    else:
+        findings = re.findall("<< דובר >>.+<< דובר >>", txt)
     findings_counter = Counter(findings)
+    
     knesset_rights_counter = {}
     for name, number in findings_counter.items():
         for member in knesset_members:
             if member in name:
                 knesset_rights_counter[member] = number
                 break
-    return knesset_rights_counter, len(findings_counter), len(findings)
+    n_speaks = len(findings)
+    n_speakers = len(findings_counter)
+    del findings
+    del findings_counter
+    return knesset_rights_counter, n_speakers, n_speaks

@@ -55,15 +55,11 @@ def main():
         filtered_text = utils.filter_protocol_sentences(text, old_format)
         del text
 
-        if filtered_text is None:
-            print(f'warning: skipping protocol with id {session_id}')
-            continue
-
         lines = filtered_text.split('\n')
         sentences = []
         for line in lines:
             sentences.extend(line.split('.'))
-        sentences = [s.strip() for s in sentences if s.strip()]
+        sentences = [s.strip() for s in sentences]
 
         del filtered_text
         agg_score = agg_scores_rater.rate_aggressiveness(sentences)
@@ -83,11 +79,9 @@ def main():
     
         # clear memory to avoid memory leak
         del warnings
-        del n_warnings
         del agg_score
         del speaker_cnt
-        del n_speakers
-        del n_speaks
+        del results
 
 
 if __name__ == '__main__':
