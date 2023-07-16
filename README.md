@@ -1,8 +1,8 @@
 # Automatic Detection of Warnings and Removals in Knesset Committee Meetings
-The final project for the Natural Language Processing and Social Dynamics course at the Ben-Gurion University of the Negev, supervised by [Dr. Oren Tsur] [https://www.naslab.ise.bgu.ac.il/orentsur].
+The final project for the Natural Language Processing and Social Dynamics course at the Ben-Gurion University of the Negev, supervised by [Dr. Oren Tsur](https://www.naslab.ise.bgu.ac.il/orentsur).
 
 ## Introduction
-This project aims to automatically detect warnings and removals in Knesset committee meetings, and evaluate the level of aggressiveness exhibited in these meetings. The project utilizes a combination of regular expression (regex) based warning detection and a fine-tuned [AlephBert][https://huggingface.co/onlplab/alephbert-base] model for aggressiveness scoring. The data used in this project consists of 1653 meeting protocols from Knesset 20 to Knesset 25, focusing on the following committees: Knesset Committee, Finance Committee, Defense Committee, Law and Order Committee, and Science and Technology Committee.
+This project aims to automatically detect warnings and removals in Knesset committee meetings, and evaluate the level of aggressiveness exhibited in these meetings. The project utilizes a combination of regular expression (regex) based warning detection and a fine-tuned [AlephBert](https://huggingface.co/onlplab/alephbert-base) model for aggressiveness scoring. The data used in this project consists of 1653 meeting protocols from Knesset 20 to Knesset 25, focusing on the following committees: Knesset Committee, Finance Committee, Defense Committee, Law and Order Committee, and Science and Technology Committee.
 
 ## Requirements
 Before running the code or using the models, make sure you have the following dependencies installed:
@@ -33,10 +33,6 @@ Each file contains the following information:
 - speaker_cnt: a Counter object that counts the number of times each Knesset member has spoken.
 - n_speakers: Number of speakers in the meeting.
 - n_speaks: Number of times someone spoke during the meeting (the length of the conversation).
-
-## Acknowledgments
-The regex patterns for warning detection were inspired by [references to be added here].
-The AlephBert model used in the aggressiveness scoring was fine-tuned based on the original BERT implementation by Google and the AlephBert code provided by [references to be added here].
 
 ## Disclaimer
 Please note that the automatic detection of warnings and removals, as well as the evaluation of aggressiveness, might not be 100% accurate. Human review and validation of the results are recommended.
