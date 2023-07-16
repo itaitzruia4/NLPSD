@@ -4,7 +4,7 @@ import pickle
 def main():
     stats = Statistics()
     
-    min_knesset_num = 24
+    min_knesset_num = 20
     max_knesset_num = 25
 
     # get all warnings
@@ -13,7 +13,7 @@ def main():
         for category_id in stats.knesset_categories_sessions[knesset_num]:
             if category_id == 6:
                 continue
-            with open(f'results/warnings_finetune_{knesset_num}_{category_id}.pkl', 'rb') as f:
+            with open(f'results/finetune_{knesset_num}_{category_id}.pkl', 'rb') as f:
                 warnings = pickle.load(f)
             filtered_warnings = {session_id: warnings[session_id][0] for session_id in warnings}
             sessions2warnings.update(filtered_warnings)
