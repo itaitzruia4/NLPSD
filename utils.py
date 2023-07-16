@@ -23,8 +23,8 @@ CATEGORY_ID_TO_NAME = {
     MONEY_COM_CATEGORY_ID: 'finance',
     DEFENSE_COM_CATEGORY_ID: 'defense',
     LAW_ORDER_COM_CATEGORY_ID: 'law and order',
-    MESADERET_COM_CATEGORY_ID: 'mesaderet',
-    KNESSET_COM_CATEGORY_ID: 'knesset'
+    KNESSET_COM_CATEGORY_ID: 'knesset',
+    SCIENCE_COM_CATEGORY_ID: 'science'
 }
 
 _regex1 = '<< דובר >>.*\n\n.*\n\n.*יו"ר.*\n\n.*פעם ה?ראש'
