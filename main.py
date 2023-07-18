@@ -2,6 +2,7 @@ import numpy as np
 from typing import Dict
 import pickle
 import sys
+import os
 
 from protocol_getter import ProtocolGetter
 from warning_counter import WarningCounter
@@ -11,17 +12,23 @@ import utils
 
 def main():
     if len(sys.argv) < 3:
-        print('usage: python main.py <knesset_num> <category_id> <protocol_start_idx>')
+        print('usage: python main.py <knesset_num> <category_id> <protocol_start_idx>? <max_split_size>?')
         return
     
     knesset_num = int(sys.argv[1])
     category_id = int(sys.argv[2])
-    protocol_start_idx = int(sys.argv[3])
+    protocol_start_idx = 0
+    max_split_size = 1024
 
-    # category_ids = CATEGORY_IDS
+    if len(sys.argv) == 3:
+        protocol_start_idx = int(sys.argv[3])
+    # if len(sys.argv) == 4:
+    #     max_split_size = int(sys.argv[4])
+    
+    # os.environ["PYTORCH_CUDA_ALLOC_CONF"] = f"max_split_size_mb:{max_split_size}"
+
     category_ids = [category_id]
 
-    # min_knesset_num, max_knesset_num = MIN_KNESSET_NUM, MAX_KNESSET_NUM
     min_knesset_num, max_knesset_num = knesset_num, knesset_num
     
     protocol_getter = ProtocolGetter(utils.COMMITTEES_PATH,
