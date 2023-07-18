@@ -51,23 +51,27 @@ OLD_WARNING_REGEX = "|".join(
 
 
 def is_old_format(text):
-    return re.search("<< יור >>") is None
+    return re.search("<< יור >>", text) is None
 
 
 def filter_protocol_sentences(text: str, old_format=False) -> str:
     pattern = 'היו"ר.*:' if old_format else "<< יור >>"
     ind = re.search(pattern, text)
-    txt2 = text[ind.span()[0]:]
-    del ind
 
-    txt2 = re.sub("<<.*", "", txt2)
-    txt2 = re.sub(">>.*", "", txt2)
-    txt2 = re.sub(".*:", "", txt2)
-    txt2 = re.sub("-", " ", txt2)
-    txt2 = re.sub("\n( )+", "\n", txt2)
-    txt2 = re.sub(" +", " ", txt2)
-    txt2 = re.sub("\t", "", txt2)
-    return txt2
+    if ind is None:
+        print('Warning: no chairman found')
+    else:
+        text = text[ind.span()[0]:]
+        del ind
+
+    text = re.sub("<<.*", "", text)
+    text = re.sub(">>.*", "", text)
+    text = re.sub(".*:", "", text)
+    text = re.sub("-", " ", text)
+    text = re.sub("\n( )+", "\n", text)
+    text = re.sub(" +", " ", text)
+    text = re.sub("\t", "", text)
+    return text
 
 
 def get_speakers_info(txt, knesset_members, old_format=False):

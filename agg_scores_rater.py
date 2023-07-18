@@ -6,12 +6,13 @@ from typing import List
 class AggScoresRater:
     def __init__(self, model_path):
         # Load saved model from file
-        self.device = torch.device('cuda' if torch.cuda.is_available() else 'cpu')
+        self.device = torch.device('cpu')
         self.tokenizer = AutoTokenizer.from_pretrained('onlplab/alephbert-base')
         self.model = torch.load(model_path)
 
     def rate_aggressiveness(self,
                             sentences: List[str]) -> float:
+        torch.cuda.empty_cache()
         # Evaluate model
         self.model.to(self.device)
         self.model.eval()
