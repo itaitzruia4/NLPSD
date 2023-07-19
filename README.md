@@ -1,5 +1,5 @@
 # Detection and Analysis of Aggressive Behavior in Knesset Committees
-The final project for the Natural Language Processing and Social Dynamics course at the Ben-Gurion University of the Negev, supervised by [Dr. Oren Tsur](https://www.naslab.ise.bgu.ac.il/orentsur).
+The final project for the Natural Language Processing and Social Dynamics course at Ben-Gurion University of the Negev, supervised by [Dr. Oren Tsur](https://www.naslab.ise.bgu.ac.il/orentsur).
 
 ## Introduction
 This project aims to automatically detect warnings and removals in Knesset committee meetings, and evaluate the level of agression exhibited in these meetings. The project utilizes a combination of regular expression (regex) based warning detection and a fine-tuned [AlephBert](https://huggingface.co/onlplab/alephbert-base) model for agression scoring. 
