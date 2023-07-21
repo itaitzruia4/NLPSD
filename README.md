@@ -5,7 +5,14 @@ The final project for the Natural Language Processing and Social Dynamics course
 This project aims to automatically detect warnings and removals in Knesset committee meetings, and evaluate the level of agression exhibited in these meetings. The project utilizes a combination of regular expression (regex) based warning detection and a fine-tuned [AlephBert](https://huggingface.co/onlplab/alephbert-base) model for agression scoring. 
 
 ## Data
-The data used in this project consists of 2070 documented meeting protocols taken from Knesset 20 to Knesset 25, focusing on the following committees: Knesset Committee, Finance Committee, Defense Committee, Law and Order Committee, and Science and Technology Committee. The meeting protocols were obtained via GET requests from the [Open Knesset website](https://oknesset.org/).
+The data used in this project consists of 2070 documented meeting protocols taken from Knesset 20 to Knesset 25, focusing on the following committees:
+- Knesset Committee
+- Finance Committee
+- Defense Committee
+- Law and Order Committee
+- Science and Technology Committee.
+
+The meeting protocols were obtained via GET requests from the [Open Knesset website](https://oknesset.org/).
 
 ## Warning Detection
 Warning detection in the meeting protocols is performed using regular expressions (regex). The regex patterns are designed to identify specific warning phrases or keywords that are commonly used in the context of Knesset committee meetings. The code for warning detection can be found in the file `warning_counter.py`.
