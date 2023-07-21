@@ -2,6 +2,7 @@ import pytest
 import utils
 from warning_counter import WarningCounter
 
+
 class Tests:
     def test_middle_names(self):
         warning_counter = WarningCounter(utils.MEMBERS_PATH)

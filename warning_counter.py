@@ -1,11 +1,28 @@
 import re
 import pandas as pd
-from typing import List, Tuple
+from typing import Tuple
 from copy import deepcopy
 import utils
 
 
 class WarningCounter:
+    '''
+    Count warnings for each Knesset member.
+
+    Parameters
+    ----------
+    members_file_path : str
+        Path to the knesset members file.
+    
+    Attributes
+    ----------
+    knesset_members : List[str]
+        List of knesset members.
+    warnings : dict
+        Dictionary of warnings for each knesset member.
+        The keys are the knesset members names and the values are lists of
+        three integers, representing the number of warnings for each type.
+    '''
     def __init__(self, members_file_path: str):
         knesset_members_df = pd.read_csv(members_file_path)
         first_names = knesset_members_df['FirstName'].to_list()
@@ -39,7 +56,7 @@ class WarningCounter:
             ]
 
     def count_warnings(self,
-                       text,
+                       text: str,
                        old_format=False
                        ) -> Tuple[dict, int]:
         """
@@ -50,11 +67,8 @@ class WarningCounter:
         text : str
             Meeting protocol text.
 
-        warnings: Dict[str, List[int]]
-            Number of warnings for each Knesset member.
-
-        knesset_members: List[str]
-            List of Knesset members.
+        old_format : bool
+            True if the text is in old format, False otherwise.
         """
         word2idx = {'ראש': 0, 'שני': 1, 'שליש': 2}
 
@@ -79,10 +93,10 @@ class WarningCounter:
             del sentences
         del matches
 
-        # keep a copy of the warnings
+        # keep a copy of the warnings to be returned
         result = deepcopy(self.warnings)
         
-        # reset warnings
+        # reset warnings field
         for warnings in self.warnings.values():
             for idx in range(len(warnings)):
                 warnings[idx] = 0
