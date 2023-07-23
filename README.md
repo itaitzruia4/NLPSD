@@ -1,17 +1,24 @@
-# Automatic Detection of Warnings and Removals in Knesset Committee Meetings
-The final project for the Natural Language Processing and Social Dynamics course at the Ben-Gurion University of the Negev, supervised by [Dr. Oren Tsur](https://www.naslab.ise.bgu.ac.il/orentsur).
+# Detection and Analysis of Aggressive Behavior in Knesset Committees
+The final project for the Natural Language Processing and Social Dynamics course at Ben-Gurion University of the Negev, supervised by [Dr. Oren Tsur](https://www.naslab.ise.bgu.ac.il/orentsur).
 
 ## Introduction
-This project aims to automatically detect warnings and removals in Knesset committee meetings, and evaluate the level of aggressiveness exhibited in these meetings. The project utilizes a combination of regular expression (regex) based warning detection and a fine-tuned [AlephBert](https://huggingface.co/onlplab/alephbert-base) model for aggressiveness scoring. The data used in this project consists of 1653 meeting protocols from Knesset 20 to Knesset 25, focusing on the following committees: Knesset Committee, Finance Committee, Defense Committee, Law and Order Committee, and Science and Technology Committee.
-  
+This project aims to automatically detect warnings and removals in Knesset committee meetings, and evaluate the level of agression exhibited in these meetings. The project utilizes a combination of regular expression (regex) based warning detection and a fine-tuned [AlephBert](https://huggingface.co/onlplab/alephbert-base) model for agression scoring. 
+
 ## Data
-The dataset used in this project contains 1653 meeting protocols from Knesset 20 to Knesset 25. Each protocol represents a meeting from one of the specified committees: Knesset Committee, Finance Committee, Defense Committee, Law and Order Committee, or Science and Technology Committee. The meeting protocols were obtained via GET requests from the Open Knesset website.
+The data used in this project consists of 2070 documented meeting protocols taken from Knesset 20 to Knesset 25, focusing on the following committees:
+- Knesset Committee
+- Finance Committee
+- Defense Committee
+- Law and Order Committee
+- Science and Technology Committee.
+
+The meeting protocols were obtained via GET requests from the [Open Knesset website](https://oknesset.org/).
 
 ## Warning Detection
-Warning detection in the meeting protocols is performed using regular expressions (regex). The regex patterns are designed to identify specific warning phrases or keywords that are commonly used in the context of Knesset committee meetings. The code for warning detection can be found in the warning_detection.py file.
+Warning detection in the meeting protocols is performed using regular expressions (regex). The regex patterns are designed to identify specific warning phrases or keywords that are commonly used in the context of Knesset committee meetings. The code for warning detection can be found in the file `warning_counter.py`.
 
 ## Aggressiveness Scoring
-The aggressiveness scoring is accomplished through a fine-tuned AlephBert model. The model has been pretrained on a large corpus of Hebrew text and further fine-tuned on a labeled dataset of aggressive language. The AlephBert model takes a text input and produces a score indicating the level of aggressiveness present in the text. The code for the aggressiveness scoring can be found in the aggressiveness_scoring.py file.
+The aggressiveness scoring is accomplished through a fine-tuned AlephBert model. The model has been pretrained on a large corpus of Hebrew text and further fine-tuned on a labeled dataset of aggressive language. The AlephBert model takes a text input and produces a score indicating the level of aggressiveness present in the text. The code for the aggressiveness scoring can be found in the file `agg_scores_rater.py`.
 
 ## Requirements
 Before running the code or using the models, make sure you have the following dependencies installed:
@@ -21,7 +28,6 @@ Before running the code or using the models, make sure you have the following de
 - Transformers (Hugging Face)
 - Numpy
 - Pandas
-- Requests
 
 ## Usage
 Make sure you have the required dependencies installed as mentioned in the "Requirements" section.

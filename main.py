@@ -1,8 +1,5 @@
-import numpy as np
-from typing import Dict
 import pickle
 import sys
-import os
 
 from protocol_getter import ProtocolGetter
 from warning_counter import WarningCounter
@@ -12,37 +9,36 @@ import utils
 
 def main():
     if len(sys.argv) < 3:
-        print('usage: python main.py <knesset_num> <category_id> <protocol_start_idx>? <max_split_size>?')
+        print('usage: python main.py <knesset_num> <category_id> <protocol_start_idx>?')
         return
     
+    # Knesset number (20-25) and category id (1, 2, 4, 6, 13)
     knesset_num = int(sys.argv[1])
     category_id = int(sys.argv[2])
-    protocol_start_idx = 0
-    max_split_size = 1024
 
+    # default: start processing the first protocol
+    protocol_start_idx = 0
     if len(sys.argv) == 3:
         protocol_start_idx = int(sys.argv[3])
-    # if len(sys.argv) == 4:
-    #     max_split_size = int(sys.argv[4])
-    
-    # os.environ["PYTORCH_CUDA_ALLOC_CONF"] = f"max_split_size_mb:{max_split_size}"
 
     category_ids = [category_id]
-
-    min_knesset_num, max_knesset_num = knesset_num, knesset_num
-    
     protocol_getter = ProtocolGetter(utils.COMMITTEES_PATH,
-                                     min_knesset_num,
-                                     max_knesset_num,
+                                     knesset_num,
+                                     knesset_num,
                                      category_ids)
 
     model = 'finetune'
     agg_scores_rater = AggScoresRater(model_path=f'model_{model}.pt')
     warning_counter = WarningCounter(utils.MEMBERS_PATH)
 
+    # Committee ID: unique identifier for a committee in a certain knesset
     committee_id = protocol_getter.committee_ids[0]
     print('committee id:', committee_id)
-    protocols2paths: Dict[int, str] = protocol_getter.get_protocols_paths(committee_id, start=protocol_start_idx)
+
+    # fetch protocols from the Knesset website
+    # protocols2paths: dictionary of <session id, text protocol path>
+    protocols2paths = protocol_getter.get_protocols_paths(committee_id,
+                                                          start=protocol_start_idx)
     print(f'fetched {len(protocols2paths)} protocols)')
 
     for session_id in list(protocols2paths.keys()):
@@ -50,14 +46,17 @@ def main():
         text = protocol_getter.get_meeting_protocol_text(protocols2paths[session_id])
         del protocols2paths[session_id]
 
+        # whether we should parse the protocol in the old format
         old_format = utils.is_old_format(text)
 
+        # extract speakers info from the protocol
         speaker_cnt, n_speakers, n_speaks = utils.get_speakers_info(
             text,
             warning_counter.knesset_members,
             old_format=old_format
         )
 
+        # count warnings and filter protocol to sentences only
         warnings = warning_counter.count_warnings(text, old_format)
         filtered_text = utils.filter_protocol_sentences(text, old_format)
         del text
@@ -67,11 +66,13 @@ def main():
         for line in lines:
             sentences.extend(line.split('.'))
         sentences = [s.strip() for s in sentences]
-
         del filtered_text
+        
+        # rate aggressiveness of the protocol
         agg_score = agg_scores_rater.rate_aggressiveness(sentences)
         del sentences
 
+        # save results to pickle files
         results = {
             'warnings': warnings,
             'speaker_cnt': speaker_cnt,
@@ -80,11 +81,10 @@ def main():
             'agg_score': agg_score
         }
 
-        # save results to pickle files
         with open(f'results/{model}_{session_id}.pkl', 'wb') as f:
             pickle.dump(results, f)
     
-        # clear memory to avoid memory leak
+        # clear memory to avoid memory leaks
         del warnings
         del agg_score
         del speaker_cnt
